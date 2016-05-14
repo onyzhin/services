@@ -1,0 +1,23 @@
+{
+  "light": {
+    "name": "Світло",
+    "prevIndex": 200,
+    "point": 100,
+    "tariff_1": 0.3,
+    "tariff_2": 0.7
+  },
+  "gas": {
+    "name": "Газ",
+    "prevIndex": 88,
+    "point": 50,
+    "tariff_1": 0.3,
+    "tariff_2": 0.9
+  },
+  "water": {
+    "name": "Вода",
+    "prevIndex": 120,
+    "point": 150,
+    "tariff_1": 0.2,
+    "tariff_2": 0.4
+  }
+}
