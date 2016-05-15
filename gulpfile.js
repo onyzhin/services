@@ -9,7 +9,7 @@ var config = {
     server: {
         baseDir: "./" 
     },
-    tunnel: true,
+    tunnel: false,
     host: 'localhost',
     port: 9080,
     logPrefix: "angular"

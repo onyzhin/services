@@ -1,21 +1,16 @@
 <!doctype html>
-<html ng-app="paymentSysApp">
+<html ng-app="mainApp">
   <head> 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 	<link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
-	<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="main.js"></script> 
   </head>
   <body>
 	<div class="container">
 		<h2>Введіть показники</h2>
-		<div class="tabs"  ng-controller="servicesCtrl" >
+		<div class="tabs"  ng-controller="mainCtrl" >
 			<ul class="nav nav-tabs"
 				ng-init="tab='Світло'">
 				<li > 
@@ -31,23 +26,26 @@
 					            <div class="panel-heading">
 					              <h3 class="panel-title">Показники</h3>
 					            </div>
-					            <div class="panel-body">					              
-								  <div class="form-group">
-									<label>Поточні показники</label>
-									<input type="number" class="form-control" placeholder="" 
-									ng-model="currIndex" 
-									ng-init="currIndex=600">
-								  </div>
-								  <div class="form-group">
-									<label>Попередні показники</label>
-									<input type="number" class="form-control"  placeholder=""
-									ng-model="service.prevIndex" >
-								  </div>
+					            <div class="panel-body">	
+									<form>
+									  <div class="form-group">
+										<label>Поточні показники {{ curr }}</label>
+										<input type="number" class="form-control" placeholder="" 
+										ng-model="curr"
+										ng-init="curr=400" >
+									  </div>
+									  <div class="form-group">
+										<label>Попередні показники</label>
+										<input type="number" class="form-control"  placeholder=""
+										ng-model="prev"
+										ng-init="prev=300" >
+									  </div>
+								    </form>
 					            </div>
 					          </div>
 
-							<h4 ng-show="diff()>0">Різниця: {{diff()}}</h4>
-							<h3 ng-show="diff()>0">До сплати: <em ng-show="isNumber(calculate(service.point))">{{calculate(service.point)}} грн</em></h3>
+							<h4 >Різниця: {{ difference() }}</h4>
+							<h3 >До сплати: <em>{{  }} грн</em></h3>
 						</div>
 					</div>
 					<hr>
@@ -55,63 +53,71 @@
 						<div class="col-sm-6">
 							<div class="panel panel-success">
 					            <div class="panel-heading">
-				              		<h3 class="panel-title">
-					              		<span>Тарифи з </span>
-				                		<date-picker></date-picker>
-					                	<span>по</span>
-					                	<input type="number" class="form-control inline-input"
-					                	 toggle-class="edditing"
-										 ng-model="tarrif1" 
-										 ng-init="tarrif1=90"
-					                	>
+				              		<h3 class="panel-title">	
+										<form>
+											<span>Тарифи з </span>
+											<input type="text" class="form-control inline-input"
+											 toggle-class="edditing"
+											 ng-model="dateFrom" 
+											 ng-init="dateFrom='1.01.2016'"
+											>
+											<span>по</span>
+											<input type="text" class="form-control inline-input"
+											 toggle-class="edditing"
+											 ng-model="dateTo"
+											 ng-init="dateTo='1.12.2016'" 
+											>	
+										</form>
 				              		</h3>
 					            </div>
-					            <div class="panel-body">
-					            	<table class="table">
-							            <thead>
-							              <tr>
-							                <th></th>
-							                <th>кВт/год</th>
-							                <th>Ціна</th>
-							              </tr>
-							            </thead>
-							            <tbody>
-							              <tr>
-							                <td>1</td>
-							                <td >
-							                	<input type="number" class="form-control inline-input"
-							                	 toggle-class="edditing"
-												 ng-model="tarrif1" 
-												 ng-init="tarrif1=90"
-							                	>
-						                	</td>
-							                <td>
-							                	<input type="number" class="form-control inline-input"
-							                	 toggle-class="edditing"
-												 ng-model="price1" 
-												 ng-init="price1=0.34"
-												>
-											</td>
-							              </tr>
-							              <tr>
-							                <td>2</td>
-							                <td >
-							                	<input type="number" class="form-control inline-input"
-							                	 toggle-class="edditing"
-												 ng-model="tarrif2" 
-												 ng-init="tarrif2=10"
-							                	>
-						                	</td>
-							                <td>
-							                	<input type="number" class="form-control inline-input"
-							                	 toggle-class="edditing"
-												 ng-model="price2" 
-												 ng-init="price2=0.45"
-												>
-											</td>
-							              </tr>
-							            </tbody>
-							        </table>
+					            <div class="panel-body">	
+									<form>
+										<table class="table">
+											<thead>
+											  <tr>
+												<th></th>
+												<th>кВт/год</th>
+												<th>Ціна</th>
+											  </tr>
+											</thead>
+											<tbody>
+											  <tr>
+												<td>1</td>
+												<td >
+													<input type="number" class="form-control inline-input"
+													 toggle-class="edditing"
+													 ng-model="tarrif1" 
+													 ng-init="tarrif1=90"
+													>
+												</td>
+												<td>
+													<input type="number" class="form-control inline-input"
+													 toggle-class="edditing"
+													 ng-model="price1" 
+													 ng-init="price1=0.34"
+													>
+												</td>
+											  </tr>
+											  <tr>
+												<td>2</td>
+												<td >
+													<input type="number" class="form-control inline-input"
+													 toggle-class="edditing"
+													 ng-model="tarrif2" 
+													 ng-init="tarrif2=10"
+													>
+												</td>
+												<td>
+													<input type="number" class="form-control inline-input"
+													 toggle-class="edditing"
+													 ng-model="price2" 
+													 ng-init="price2=0.45"
+													>
+												</td>
+											  </tr>
+											</tbody>
+										</table>	
+									</form>
 					            </div>
 					        </div>
 						</div>
@@ -120,6 +126,7 @@
 			</div>		
         </div>
 	</div>
+	<script src="main.js"></script> 
   </body>
 </html>
 <!--  -->

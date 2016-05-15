@@ -1,79 +1,86 @@
+'use strict';
+
 (function () {
 
-  var app = angular.module('paymentSysApp', []);
+	var app = angular.module('mainApp', []);
 
-  app.controller('paymentSysController', ['$scope', '$http',  function ($scope, $http) {      
-   
-    /*
-    //DATA FROM JSON
-    $http.get('data.json')
-    .success(function(data){
-      $scope.services = data;
-      console.log( $scope.services);
-    })
-    .error(function(data){
-      console.log('not found data file')
-    })
-    */
+	app.directive('toggleClass', function() {
+		return {
+		  restrict: 'A',
+		  link: function(scope, element, attrs) {
+			  element.on('focusin', function() {
+				element.addClass(attrs.toggleClass)
+			  });
+			  element.on('focusout', function() {
+				element.removeClass(attrs.toggleClass)
+			  });
+		  }
+		};
+	});
 
-    $scope.isSelected = function(checkTab) {
-      return this.tab === checkTab;
-    };
+	app.directive('datePicker', function() {
+		return {
+		  restrict: 'E',
+		  templateUrl: 'templates/date-picker.html',
+		  link: function(scope, element, attrs) {
+		  }
+		};
+	});
+  
+	app.service('CalcService', function(){	
+	
+		this.greaterZero = function(value) {
+		  return value > 0; 
+		}
+		
+		this.isNumber = function(value) {
+		  return typeof value == 'number';
+		}		
 
-    $scope.selectTab = function(setTab) {
-      $scope.tab = setTab;
-      console.log(setTab);
-    }
-        
-  }]);
+		this.subtract = function(a, b) {
+			return b-a;
+		}
+		
+		this.check = function(checkFunc, checkValue) {		
+			for (var j = 0; j < checkFunc.length; j++) {
+				for (var i = 0; i < checkValue.length; i++) {
+				  if (!checkFunc[j](checkValue[i])) {
+					return false
+				  }
+				}
+			}
+			return true;
+		}
+		
+	});
 
-  app.directive('toggleClass', function() {
-      return {
-          restrict: 'A',
-          link: function(scope, element, attrs) {
-              element.on('focusin', function() {
-                element.addClass(attrs.toggleClass)
-              });
-              element.on('focusout', function() {
-                element.removeClass(attrs.toggleClass)
-              });
-          }
-      };
-  });
+	app.controller('mainCtrl', ['$scope', '$http', '$log', 'CalcService', function ($scope, $http, $log, CalcService) {
 
-  app.directive('datePicker', function() {
-    return {
-      restrict: 'E',
-      templateUrl: 'templates/date-picker.html',
-      link: function(scope, element, attrs) {
-        $('#datetimepicker1').datetimepicker({
-          locale: 'fr'
-        });
-      }
-    };
-  });
+		$scope.editting = function() {
+		  $scope.isEdditing = !$scope.isEdditing;
+		  console.log($scope.isEdditing);
+		}; 
+	
+		$scope.difference = function() {
+			var difference = CalcService.subtract(
+				$scope.prev, $scope.curr
+			);
+			if (CalcService.check([
+					CalcService.isNumber,
+					CalcService.greaterZero
+				], [$scope.prev, 
+					$scope.curr,
+					difference
+				]))
+				return difference;
+		};
+	
+		$scope.calculate = function() {
+			var difference = $scope.difference();
+			
+		};
 
-  app.controller('servicesCtrl', ['$scope', '$http', function ($scope, $http) {
-
-    $scope.editting = function() {
-      $scope.isEdditing = !$scope.isEdditing;
-      console.log($scope.isEdditing);
-    }
-
-
-    $scope.diff = function() {
-
-    };
-
-    $scope.calculate = function() {
-
-    };
-
-    $scope.isNumber = function(value) {
-      return !isNaN(value)
-    } 
-
-  }]); 
+	}]); 
 
 
 }) ();
