@@ -146,8 +146,7 @@
 		}; 
 		
 		$scope.getRecords = function (service) {
-			//fetches records from local storage
-			
+			//fetches records from local storage			
 			if (localStorageService.get(service.hist)) {
 				service.data.records = localStorageService.get(service.hist);
 			} else {
@@ -204,8 +203,9 @@
 			return calcService.formatDate(new Date(date));		
 		};
 		
-		$scope.lastRate = function(){
-			//return $scope.records[$scope.records.length-1].rate;
+		$scope.lastRate = function(service){
+			return (service.data.records.length>0) ?
+				service.data.records[(service.data.records.length)-1].rate : 0;
 		}
 		
 		$scope.clearAll = function() {
