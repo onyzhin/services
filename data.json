@@ -1,23 +1,29 @@
 {
   "light": {
     "name": "Світло",
-    "prevIndex": 200,
-    "point": 100,
-    "tariff_1": 0.3,
-    "tariff_2": 0.7
+	"storage": "light_data", 
+	"history": "light_history", 
+	"data": {
+		"tariffs": [],
+		"records": []
+	}
   },
   "gas": {
     "name": "Газ",
-    "prevIndex": 88,
-    "point": 50,
-    "tariff_1": 0.3,
-    "tariff_2": 0.9
+	"storage": "gas_data",
+	"hist": "gas_history", 
+	"data": {
+		"tariffs": [],
+		"records": []
+	}
   },
   "water": {
     "name": "Вода",
-    "prevIndex": 120,
-    "point": 150,
-    "tariff_1": 0.2,
-    "tariff_2": 0.4
+	"storage": "water_data",
+	"hist": "water_history", 
+	"data": {
+		"tariffs": [],
+		"records": []
+	}
   }
 }
